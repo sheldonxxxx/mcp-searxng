@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./ /app
 
-RUN --mount=type=cache,target=/root/.npm npm install
+RUN --mount=type=cache,target=/root/.npm npm run bootstrap
 
 FROM node:lts-alpine AS release
 
