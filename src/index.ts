@@ -193,7 +193,11 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 // Main function
 async function main() {
   // Environment validation
-  validateEnv();
+  const validationError = validateEnv();
+  if (validationError) {
+    console.error(`❌ ${validationError}`);
+    process.exit(1);
+  }
 
   // Check for HTTP transport mode
   const httpPort = process.env.MCP_HTTP_PORT;
@@ -226,7 +230,14 @@ async function main() {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
   } else {
     // Default STDIO transport
-    console.log("Starting STDIO transport");
+    // Show helpful message when running in terminal
+    if (process.stdin.isTTY) {
+      console.log(`🔍 MCP SearXNG Server v${packageVersion} - Ready`);
+      console.log("✅ Configuration valid");
+      console.log(`🌐 SearXNG URL: ${process.env.SEARXNG_URL}`);
+      console.log("📡 Waiting for MCP client connection via STDIO...\n");
+    }
+    
     const transport = new StdioServerTransport();
     await server.connect(transport);
     

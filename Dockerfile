@@ -8,6 +8,8 @@ RUN --mount=type=cache,target=/root/.npm npm install
 
 FROM node:lts-alpine AS release
 
+RUN apk update && apk upgrade
+
 WORKDIR /app
 
 COPY --from=builder /app/dist /app/dist
