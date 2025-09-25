@@ -11,6 +11,8 @@ An [MCP server](https://modelcontextprotocol.io/introduction) implementation tha
 ## Features
 
 - **Web Search**: General queries, news, articles, with pagination.
+- **URL Content Reading**: Advanced content extraction with pagination, section filtering, and heading extraction.
+- **Intelligent Caching**: URL content is cached with TTL (Time-To-Live) to improve performance and reduce redundant requests.
 - **Pagination**: Control which page of results to retrieve.
 - **Time Filtering**: Filter results by time range (day, month, year).
 - **Language Selection**: Filter results by preferred language.
@@ -28,9 +30,14 @@ An [MCP server](https://modelcontextprotocol.io/introduction) implementation tha
     - `safesearch` (number, optional): Safe search filter level (0: None, 1: Moderate, 2: Strict) (default: instance setting)
 
 - **web_url_read**
-  - Read and convert the content from a URL to markdown
+  - Read and convert the content from a URL to markdown with advanced content extraction options
   - Inputs:
     - `url` (string): The URL to fetch and process
+    - `startChar` (number, optional): Starting character position for content extraction (default: 0)
+    - `maxLength` (number, optional): Maximum number of characters to return
+    - `section` (string, optional): Extract content under a specific heading (searches for heading text)
+    - `paragraphRange` (string, optional): Return specific paragraph ranges (e.g., '1-5', '3', '10-')
+    - `readHeadings` (boolean, optional): Return only a list of headings instead of full content
 
 ## Configuration
 
