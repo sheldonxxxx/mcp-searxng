@@ -203,7 +203,7 @@ export async function fetchAndConvertToMarkdown(
         // Return a markdown template for 403 errors instead of throwing
         const result = `The requested URL returned a 403 Forbidden error.`;
 
-        logMessage(server, "warn", `403 Forbidden error for URL: ${url}`);
+        logMessage(server, "warning", `403 Forbidden error for URL: ${url}`);
         return result;
       }
 
