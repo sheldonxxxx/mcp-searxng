@@ -199,6 +199,14 @@ export async function fetchAndConvertToMarkdown(
     }
 
     if (!response.ok) {
+      if (response.status === 403) {
+        // Return a markdown template for 403 errors instead of throwing
+        const result = `The requested URL returned a 403 Forbidden error.`;
+
+        logMessage(server, "warn", `403 Forbidden error for URL: ${url}`);
+        return result;
+      }
+
       let responseBody: string;
       try {
         responseBody = await response.text();
