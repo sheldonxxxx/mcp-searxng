@@ -6,10 +6,10 @@ import { urlCache } from "./cache.js";
 import {
   createURLFormatError,
   createNetworkError,
-  createServerError,
   createContentError,
   createConversionError,
   createTimeoutError,
+  createHTTPErrorWarning,
   createEmptyContentWarning,
   createUnexpectedError,
   type ErrorContext
@@ -199,14 +199,6 @@ export async function fetchAndConvertToMarkdown(
     }
 
     if (!response.ok) {
-      if (response.status === 403) {
-        // Return a markdown template for 403 errors instead of throwing
-        const result = `The requested URL returned a 403 Forbidden error.`;
-
-        logMessage(server, "warning", `403 Forbidden error for URL: ${url}`);
-        return result;
-      }
-
       let responseBody: string;
       try {
         responseBody = await response.text();
@@ -214,8 +206,9 @@ export async function fetchAndConvertToMarkdown(
         responseBody = '[Could not read response body]';
       }
 
-      const context: ErrorContext = { url };
-      throw createServerError(response.status, response.statusText, responseBody, context);
+      // Handle HTTP errors gracefully
+      logMessage(server, "warning", `HTTP ${response.status} error for URL: ${url}`);
+      return createHTTPErrorWarning(url, response.status, response.statusText, responseBody);
     }
 
     // Retrieve HTML content
