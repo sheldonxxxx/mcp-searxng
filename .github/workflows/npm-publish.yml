@@ -5,6 +5,30 @@ on:
     branches: [ "main" ]
 
 jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org/'
+      
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      
+      - name: Build package
+        run: npm run build
+      
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -17,7 +41,12 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
-      - run: npm ci
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@sheldonxxxx'
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Build package
+        run: npm run build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
