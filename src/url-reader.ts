@@ -208,7 +208,7 @@ export async function fetchAndConvertToMarkdown(
 
       // Handle HTTP errors gracefully
       logMessage(server, "warning", `HTTP ${response.status} error for URL: ${url}`);
-      return createHTTPErrorWarning(url, response.status, response.statusText, responseBody);
+      return createHTTPErrorWarning(url, response.status, response.statusText);
     }
 
     // Retrieve HTML content

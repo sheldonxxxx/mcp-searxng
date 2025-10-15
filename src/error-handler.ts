@@ -109,8 +109,8 @@ export function createTimeoutError(timeout: number, url: string): MCPSearXNGErro
   return new MCPSearXNGError(`⏱️ Timeout Error: ${hostname} took longer than ${timeout}ms to respond`);
 }
 
-export function createHTTPErrorWarning(url: string, status: number, statusText: string, responseBody: string): string {
-  return `⚠️ HTTP Warning: The requested URL returned an HTTP ${status} error: ${statusText} body: ${responseBody}`;
+export function createHTTPErrorWarning(url: string, status: number, statusText: string): string {
+  return `⚠️ HTTP Warning: The requested URL returned an HTTP ${status} error: ${statusText}`;
 }
 
 export function createEmptyContentWarning(url: string, htmlLength: number, htmlPreview: string): string {
