@@ -9,21 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      packages: write # allow GITHUB_TOKEN to publish packages
     steps:
       - uses: actions/checkout@v5
       # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '18'
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@sheldonxxxx'
       - name: Install dependencies
         run: npm install --ignore-scripts
       - run: npm ci
-      - name: Build package
-        run: npm run build
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm test
+      - uses: JS-DevTools/npm-publish@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          registry: "https://npm.pkg.github.com"
