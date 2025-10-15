@@ -21,6 +21,7 @@ jobs:
           scope: '@sheldonxxxx'
       - name: Install dependencies
         run: npm install --ignore-scripts
+      - run: npm ci
       - name: Build package
         run: npm run build
       - run: npm publish
